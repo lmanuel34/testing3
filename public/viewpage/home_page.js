@@ -31,10 +31,12 @@ export function addEventListeners(){
         const thread = new Thread(
             {uid, email, title, keywordsArray, content, timestamp}) //makes thread object, if key and value are same don't ned uid: uid format
         try {
-        const docId = await FirebaseController.addThread(thread)
-        thread.docId = docId
+        const docId = await FirebaseController.addNewThread(thread)
+        thread.docId = docId.data._path.segments[1];
         //home_page() //better solution later
         const trTag = document.createElement('tr') //dynamic tr tag to be used
+        trTag.id = thread.docId
+        
         trTag.innerHTML = buildThreadView(thread)
         const threadBodyTag = document.getElementById('thread-body-tag')
         threadBodyTag.prepend(trTag)
