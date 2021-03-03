@@ -13,6 +13,16 @@ export function addThreadViewEvents(){
     }
 }
 
+export function deleteThreadViewEvents(){
+    const viewForms = document.getElementById('form-delete-thread')
+        deleteThreadFormEvent(viewForms)
+}
+
+export function deleteMessageViewEvents(){
+    const viewForms = document.getElementById('delete-message')
+    deleteMessageFormEvent(viewForms)
+}
+
 export function addThreadFormEvent(form){
         form.addEventListener('submit', async e => {
             e.preventDefault()
@@ -25,6 +35,36 @@ export function addThreadFormEvent(form){
             Util.enableButton(button, label)
         })
 }
+
+export function deleteThreadFormEvent(form){
+    
+    if(form!=null){
+    form.addEventListener('submit', async e => {
+        e.preventDefault()
+        const button = e.target.getElementsByTagName('button')[0]
+        const label = Util.disableButton(button)
+        const threadId = e.target.threadId.value
+        await FirebaseController.deleteThread(threadId)
+        //location.reload();
+        var row = document.getElementById(threadId);
+        row.parentNode.removeChild(row);
+        //await Util.sleep(1000) //testing code
+        //Util.enableButton(button, label)
+    })
+ }
+} 
+
+export function deleteMessageFormEvent(form){
+    
+    if(form!=null){
+    form.addEventListener('submit', async e => {
+        e.preventDefault()
+        const messageId = e.target.messageId.value
+        await FirebaseController.deleteMessage(messageId)
+        location.reload();
+    })
+ }
+} 
 
 export async function thread_page(threadId){
     if(!Auth.currentUser){
@@ -107,16 +147,26 @@ export async function thread_page(threadId){
         document.getElementById('textarea-add-new-message').value = ' '
 
         Util.enableButton(button, label)
+        deleteMessageViewEvents()
     })
+    deleteMessageViewEvents()
 }
 
+
 function buildMessageView(message){
+    
     return `
         <div class="border border-primary">
             <div class="bg-info text-white">
                 Replied by ${message.email} (At ${new Date(message.timestamp).toString()})
             </div>
             ${message.content}
+            <div>
+            <form id="delete-message" method="post" class="message-delete-form">
+            <input type="hidden" name="messageId" value="${message.docId}">
+            <button type="submit" class="btn btn-outline-primary">Delete</button>
+            </form>
+            </div>
         </div>
         <hr>
     `

@@ -4,6 +4,11 @@ import * as About from './viewpage/about_page.js'
 import * as Routes from './controller/routes.js'
 import * as Search from './viewpage/search_page.js'
 
+if (window.location.host.includes('localhost')|| 
+	window.location.host.includes('127.0.0.0')) {
+	firebase.functions().useFunctionsEmulator('http://localhost:5001')
+}
+
 Auth.addEventListeners()
 Home.addEventListeners()
 About.addEventListeners()

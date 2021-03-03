@@ -38,6 +38,8 @@ export function addEventListeners(){
         trTag.innerHTML = buildThreadView(thread)
         const threadBodyTag = document.getElementById('thread-body-tag')
         threadBodyTag.prepend(trTag)
+        ThreadPage.addThreadViewEvents()
+        ThreadPage.deleteThreadViewEvents()
         //const threadForms = document.getElementsByClassName('thread-view-form');
         //ThreadPage.addThreadFormEvent(threadForms[0])
         Element.formCreateThread.reset()
@@ -123,7 +125,7 @@ function buildThreadView(thread){
                 </form>
                 <form id ="form-delete-thread" method="post">
                 <input type="hidden" name="threadId" value="${thread.docId}">
-                <button id="delete-thread"class="btn btn-outline-danger">Delete</button>
+                <button type="submit" id="delete-thread"class="btn btn-outline-danger">Delete</button>
             </form>
             </td>
             <td>${thread.title}</td>
