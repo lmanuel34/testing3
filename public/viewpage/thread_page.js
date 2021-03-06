@@ -19,8 +19,10 @@ export function deleteThreadViewEvents(){
 }
 
 export function deleteMessageViewEvents(){
-    const viewForms = document.getElementById('delete-message')
-    deleteMessageFormEvent(viewForms)
+    const viewForms = document.getElementsByClassName('message-delete-form')
+    for (let n = 0; n <viewForms.length; n++){
+    deleteMessageFormEvent(viewForms[n])
+    }
 }
 
 export function addThreadFormEvent(form){
@@ -61,7 +63,11 @@ export function deleteMessageFormEvent(form){
         e.preventDefault()
         const messageId = e.target.messageId.value
         await FirebaseController.deleteMessage(messageId)
-        location.reload();
+        const divTag = document.getElementById(messageId)
+        divTag?.parentNode.removeChild(divTag)
+        
+
+        //location.reload();
     })
  }
 } 
@@ -156,15 +162,15 @@ export async function thread_page(threadId){
 function buildMessageView(message){
     
     return `
-        <div class="border border-primary">
+        <div id="${message.docId}" class="border border-primary">
             <div class="bg-info text-white">
                 Replied by ${message.email} (At ${new Date(message.timestamp).toString()})
             </div>
             ${message.content}
             <div>
-            <form id="delete-message" method="post" class="message-delete-form">
+            <form  method="post" class="message-delete-form">
             <input type="hidden" name="messageId" value="${message.docId}">
-            <button type="submit" class="btn btn-outline-primary">Delete</button>
+            <button d="${message.docId}-button" type="submit" class="btn btn-outline-primary">Delete</button>
             </form>
             </div>
         </div>

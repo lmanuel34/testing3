@@ -103,7 +103,7 @@ export function buildHomeScreen(threadList, newButton){
     `
 
     threadList.forEach(thread => {
-        html += '<tr>' + buildThreadView(thread) + '</tr>' //this is the tr tag code
+        html += '<tr id="'+thread.docId+'">' + buildThreadView(thread) + '</tr>' //this is the tr tag code
     })
 
     html += `
@@ -131,7 +131,7 @@ function buildThreadView(thread){
             </form>
             </td>
             <td>${thread.title}</td>
-            <td>${thread.keywordsArray.join(' ')}</td>
+            <td>${thread.keywordsArray?.join(' ')}</td>
             <td>${thread.email}</td>
             <td>${thread.content}</td>
             <td>${new Date(thread.timestamp).toString()}</td>
